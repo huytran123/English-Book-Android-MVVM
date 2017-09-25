@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.i.englishbook.common.CodeHelper" />
+
+        <variable
+            name="cate"
+            type="com.i.englishbook.model.Category" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_1"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="@dimen/padding_1"
+            app:imageResource="@{CodeHelper.getResourceId(context,cate.getImgCateName())}" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{cate.E}"
+                android:textColor="@color/text_color_1"
+                android:textSize="@dimen/text_size_1"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{cate.V}"
+                android:textColor="@color/text_color_3"
+                android:textSize="@dimen/text_size_2"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
