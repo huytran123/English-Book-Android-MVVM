@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     ArrayList<Category> cates;
 
-    public CategoryAdapter(ArrayList<Category> cates){
+    public CategoryAdapter(ArrayList<Category> cates) {
         this.cates = cates;
     }
 
@@ -30,7 +30,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
         Category cate = cates.get(position);
-        holder.bindingCate(cate);
+        holder.bindingCate(cate, position);
     }
 
     @Override

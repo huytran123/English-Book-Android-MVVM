@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.SystemClock;
 
+import com.i.englishbook.BuildConfig;
 import com.i.englishbook.common.CodeHelper;
 import com.i.englishbook.common.Common;
 import com.i.englishbook.controller.base.BaseViewModel;
@@ -34,7 +35,7 @@ public class SplashViewModel extends BaseViewModel {
             Common.DBPATH = dbPath + "/data.db";
             File dbFile = new File(Common.DBPATH);
             String mess = "";
-            if (!dbFile.exists()) {
+            if (!dbFile.exists() || BuildConfig.DEBUG) {
                 mess = CodeHelper.copyFileFromAsset(context, "data.db", dbPath);
             }
             if (CodeHelper.isEmptyOrNull(mess)) {

@@ -1,7 +1,11 @@
 package com.i.englishbook.model;
 
+import android.view.View;
+
 import com.i.englishbook.annotations.Column;
 import com.i.englishbook.annotations.Table;
+import com.i.englishbook.controller.main.MainNavigator;
+import com.i.englishbook.controller.main.MainView;
 
 /**
  * Created by huytran on 8/17/2017.
@@ -27,5 +31,9 @@ public class Category {
         Id = id;
         E = e;
         V = v;
+    }
+
+    public void onClick(View view) {
+        ((MainNavigator) view.getContext()).cateOnClick(view);
     }
 }
