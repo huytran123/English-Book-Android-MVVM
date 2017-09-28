@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="vm"
+            type="com.i.englishbook.controller.detail.DetailViewModel" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +35,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_play" />
+                android:onClick="@{vm.playClick}"
+                android:src="@{vm.IsPlay ? @drawable/ic_pause :  @drawable/ic_play }" />
 
             <ImageView
                 android:layout_width="0dp"
@@ -40,13 +48,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_play_loop" />
+                android:src="@drawable/ic_loop" />
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/ic_play_random" />
+                android:src="@drawable/ic_random" />
         </LinearLayout>
     </LinearLayout>
 </layout>

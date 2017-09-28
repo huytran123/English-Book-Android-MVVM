@@ -1,6 +1,8 @@
 package com.i.englishbook.controller.detail;
 
 import android.content.Context;
+import android.databinding.ObservableField;
+import android.view.View;
 
 import com.i.englishbook.common.SqlHelper;
 import com.i.englishbook.controller.base.BaseViewModel;
@@ -20,7 +22,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DetailViewModel extends BaseViewModel<DetailNavigator> {
 
-    public DetailViewModel(Context c){
+    public ObservableField<Boolean> IsPlay = new ObservableField<>(false);
+
+    public DetailViewModel(Context c) {
         this.context = c;
     }
 
@@ -34,7 +38,29 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> getNavigator().getSentencesComplete(next),
-                        error -> getNavigator().getSentencesError(error.getMessage()), () -> {});
+                        error -> getNavigator().getSentencesError(error.getMessage()), () -> {
+                        });
+
+    }
+
+    public void playClick(View view) {
+        IsPlay.set(!IsPlay.get());
+        if (IsPlay.get())
+            getNavigator().playSentence(0);
+        else getNavigator().stopSentence();
+
+    }
+
+    public void loopClick(View view) {
+
+    }
+
+
+    public void nextClick(View view) {
+
+    }
+
+    public void randomClick(View view) {
 
     }
 }

@@ -9,17 +9,23 @@
         <variable
             name="sentence"
             type="com.i.englishbook.model.Sentence" />
+
+        <variable
+            name="position"
+            type="Integer" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_1"
-        android:background="?attr/selectableItemBackground"
+        android:background="@{sentence.IsSelected ? @color/row_selected_color : @color/text_color_2}"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:onClick="@{sentence.onClick}"
+        android:orientation="horizontal"
+        android:tag="@{position}">
 
 
         <LinearLayout
@@ -48,7 +54,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="@dimen/padding_1"
-            android:src="@drawable/ic_sound" />
+            android:src="@{sentence.IsPlayed ? @drawable/ic_sound_played : @drawable/ic_sound}" />
 
     </LinearLayout>
 

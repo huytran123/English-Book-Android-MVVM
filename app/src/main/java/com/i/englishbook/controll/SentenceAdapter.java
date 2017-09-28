@@ -31,7 +31,7 @@ public class SentenceAdapter extends RecyclerView.Adapter<SentenceViewHolder> {
     @Override
     public void onBindViewHolder(SentenceViewHolder holder, int position) {
         Sentence sentence = sentences.get(position);
-        holder.bindingSentence(sentence);
+        holder.bindingSentence(sentence,position);
     }
 
     @Override

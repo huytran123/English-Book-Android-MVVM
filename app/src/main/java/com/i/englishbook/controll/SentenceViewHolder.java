@@ -21,7 +21,8 @@ public class SentenceViewHolder extends RecyclerView.ViewHolder {
         binding = DataBindingUtil.bind(itemView);
     }
 
-    public void bindingSentence(Sentence sentence) {
+    public void bindingSentence(Sentence sentence, int position) {
         binding.setSentence(sentence);
+        binding.setPosition(position);
     }
 }
