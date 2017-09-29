@@ -18,8 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_1"
-        android:background="@{sentence.IsSelected ? @color/row_selected_color : @color/text_color_2}"
+        android:background="@{sentence.IsSelected ? @drawable/ic_row_selected : @drawable/ic_row}"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -32,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginLeft="@dimen/padding_1"
             android:orientation="vertical">
 
             <TextView

@@ -47,7 +47,8 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
         IsPlay.set(!IsPlay.get());
         if (IsPlay.get())
             getNavigator().playSentence(0);
-        else getNavigator().stopSentence();
+        else
+            getNavigator().stopSentence();
 
     }
 

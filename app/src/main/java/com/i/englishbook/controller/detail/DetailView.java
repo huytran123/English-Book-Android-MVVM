@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class DetailView extends BaseView implements DetailNavigator, MediaPlayer.OnCompletionListener {
 
     ActivityDetailBinding binding;
-    DetailViewModel detailViewModel;
+    DetailViewModel viewModel;
     int cateId;
     MediaPlayer mediaPlayer;
 
@@ -35,20 +35,24 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
-        detailViewModel = new DetailViewModel(this);
-        detailViewModel.setNavigator(this);
+        viewModel = new DetailViewModel(this);
+        viewModel.setNavigator(this);
         cateId = getIntent().getIntExtra(Keys.CATEGORIY_ID, 0);
-        binding.setVm(detailViewModel);
+        binding.setVm(viewModel);
         sentences = new ArrayList<>();
         sentenceAdapter = new SentenceAdapter(sentences);
         binding.recycler.setAdapter(sentenceAdapter);
-        detailViewModel.getSentences(cateId);
+        viewModel.getSentences(cateId);
     }
 
     @Override
     public void getSentencesComplete(ArrayList<Sentence> sentences) {
+        this.sentences.clear();
         this.sentences.addAll(sentences);
         sentenceAdapter.notifyDataSetChanged();
+        if (viewModel.IsPlay.get())
+            playSentence(currentSentence);
+
     }
 
     @Override
@@ -60,9 +64,14 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     public void onCompletion(MediaPlayer mediaPlayer) {
         sentences.get(currentSentence).IsSelected = false;
         sentenceAdapter.notifyItemChanged(currentSentence);
-        if (!detailViewModel.IsPlay.get()) return;
+        if (!viewModel.IsPlay.get()) return;
         ++currentSentence;
-        if (currentSentence > sentences.size() - 1) return;
+        if (currentSentence > sentences.size() - 1) {
+            viewModel.getSentences(++cateId);
+            currentSentence = 0;
+            stopSentence();
+            return;
+        }
         playSentence(currentSentence);
     }
 
@@ -72,6 +81,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
         }
+        binding.recycler.smoothScrollToPosition(index);
         AssetFileDescriptor afd = null;
         try {
             mediaPlayer.reset();
@@ -81,7 +91,8 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
             mediaPlayer.start();
             afd.close();
             sentences.get(index).IsPlayed = true;
-            sentences.get(index).IsSelected = true;
+            if (viewModel.IsPlay.get())
+                sentences.get(index).IsSelected = true;
             sentenceAdapter.notifyItemChanged(index);
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +116,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
 
     @Override
     public void sentenceClick(int index) {
-        detailViewModel.IsPlay.set(false);
+        viewModel.IsPlay.set(false);
         stopSentence();
         playSentence(index);
         currentSentence = index;
