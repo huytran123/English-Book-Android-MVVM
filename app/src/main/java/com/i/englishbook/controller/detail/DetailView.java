@@ -77,10 +77,16 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
 
     @Override
     public void playSentence(int index) {
+        if (mediaPlayer!= null && mediaPlayer.isPlaying()) {
+            stopSentence();
+        }
+        if (index != currentSentence)
+            currentSentence = index;
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(this);
         }
+
         binding.recycler.smoothScrollToPosition(index);
         AssetFileDescriptor afd = null;
         try {
@@ -91,8 +97,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
             mediaPlayer.start();
             afd.close();
             sentences.get(index).IsPlayed = true;
-            if (viewModel.IsPlay.get())
-                sentences.get(index).IsSelected = true;
+            sentences.get(index).IsSelected = true;
             sentenceAdapter.notifyItemChanged(index);
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,6 +116,9 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
+            sentences.get(currentSentence).IsSelected = false;
+            sentenceAdapter.notifyItemChanged(currentSentence);
+            currentSentence = 0;
         }
     }
 
