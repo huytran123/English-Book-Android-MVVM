@@ -7,4 +7,4 @@ I am using technologies:
   2. Lamda Expression
   3. Data binding on android
   4. MVVM pattern
-  5. Anotation when get data from SQL
+  5. Anotation when get data from SQLite
