@@ -7,5 +7,11 @@
     <color name="text_color_1">#000000</color>
     <color name="text_color_2">#ffffff</color>
     <color name="text_color_3">#757677</color>
+    <color name="text_color_4">#a80505</color>
+
+    <color name="error_color">#cc0606</color>
+    <color name="warning_color">#d6d200</color>
+    <color name="complete_color">#75b501</color>
+
     <color name="row_selected_color">#ededed</color>
 </resources>

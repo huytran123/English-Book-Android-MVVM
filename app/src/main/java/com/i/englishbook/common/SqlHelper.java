@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.i.englishbook.annotations.Column;
-import com.i.englishbook.model.DBType;
 import com.i.englishbook.services.SQLiteMgr;
 
 import java.lang.reflect.Field;
@@ -48,16 +47,15 @@ public class SqlHelper {
         Object o = cls.newInstance();
         for (Field field : cls.getDeclaredFields()) {
             Column column = field.getAnnotation(Column.class);
-            if(column == null) continue;
+            if (column == null) continue;
             String columnName = column.Name();
-            DBType type = column.Type();
-            if (type == DBType.INTEGER) {
+            if (field.getType() == int.class) {
                 field.setInt(o, SqlHelper.getInt(cursor, columnName));
-            } else if (type == DBType.BOOL) {
+            } else if (field.getType() == boolean.class) {
                 field.setBoolean(o, SqlHelper.getBool(cursor, columnName));
-            } else if (type == DBType.DOUBLE) {
+            } else if (field.getType() == double.class) {
                 field.setDouble(o, SqlHelper.getInt(cursor, columnName));
-            } else if (type == DBType.DATETIME) {
+            } else if (field.getType() == Date.class) {
                 field.set(o, SqlHelper.getDate(cursor, columnName));
             } else
                 field.set(o, SqlHelper.getString(cursor, columnName));

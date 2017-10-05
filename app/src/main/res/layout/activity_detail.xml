@@ -5,6 +5,10 @@
 
     <data>
 
+        <import type="com.i.englishbook.model.ModePlay" />
+
+        <import type="com.i.englishbook.common.CodeHelper" />
+
         <variable
             name="vm"
             type="com.i.englishbook.controller.detail.DetailViewModel" />
@@ -16,6 +20,42 @@
         android:background="@color/text_color_2"
         android:orientation="vertical"
         tools:context="com.i.englishbook.controller.main.MainView">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:imageResource="@{CodeHelper.getResourceId(context,vm.CurrentCategory.getImgCateName())}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.CurrentCategory.E}"
+                    android:textColor="@color/text_color_2"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.CurrentCategory.V}"
+                    android:textColor="@color/text_color_2" />
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
@@ -31,30 +71,75 @@
             android:orientation="horizontal"
             android:padding="@dimen/padding_1">
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="@{vm.playClick}"
-                android:src="@{vm.IsPlay ? @drawable/ic_pause :  @drawable/ic_play }" />
+                android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@{vm.IsPlay ? @drawable/ic_next_selected : @drawable/ic_next}" />
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{vm::playClick}"
+                    android:src="@{vm.IsPlay ? @drawable/ic_pause :  @drawable/ic_play }" />
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_loop" />
+            </RelativeLayout>
 
-            <ImageView
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/ic_random" />
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{vm::nextClick}"
+                    android:src="@{vm.IsPlay ? @drawable/ic_next_selected : @drawable/ic_next}" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:src="@{vm.CurrentModePlay == ModePlay.LOOP ?  @drawable/ic_loop_selected: @drawable/ic_loop}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:onClick="@{vm::loopClick}"
+                    android:text="@{vm.NumberLoop+``}"
+                    android:textColor="@color/text_color_2"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:onClick="@{vm::randomClick}"
+                    android:src="@{vm.CurrentModePlay == ModePlay.RANDOM ? @drawable/ic_random_selected: @drawable/ic_random}" />
+            </RelativeLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 </layout>

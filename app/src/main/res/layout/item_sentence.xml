@@ -6,6 +6,8 @@
 
         <import type="com.i.englishbook.common.CodeHelper" />
 
+        <import type="android.view.View" />
+
         <variable
             name="sentence"
             type="com.i.englishbook.model.Sentence" />
@@ -23,7 +25,7 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:onClick="@{sentence.onClick}"
+        android:onClick="@{sentence::onClick}"
         android:orientation="horizontal"
         android:tag="@{position}">
 
@@ -49,13 +51,29 @@
                 android:textColor="@color/text_color_3"
                 android:textSize="@dimen/text_size_2"
                 android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{sentence.SpeedText}"
+                android:textColor="@{sentence.ColorSpeedText}"
+                android:textSize="@dimen/text_size_2"
+                android:visibility="@{sentence.SpeedText == `` ? View.GONE:View.VISIBLE}" />
         </LinearLayout>
 
         <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="@dimen/padding_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
             android:src="@{sentence.IsPlayed ? @drawable/ic_sound_played : @drawable/ic_sound}" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:onClick="@{sentence::onClickSpeech}"
+            android:layout_margin="@dimen/padding_0"
+            android:src="@drawable/ic_speech"
+            android:tag="@{position}" />
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.i.englishbook.controller.detail;
 
+import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
 
 import java.util.ArrayList;
@@ -18,4 +19,6 @@ public interface DetailNavigator {
     void stopSentence();
 
     void sentenceClick(int index);
+
+    void onClickSpeech(int index);
 }

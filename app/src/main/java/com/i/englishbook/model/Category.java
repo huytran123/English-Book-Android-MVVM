@@ -16,7 +16,7 @@ public class Category {
     public String E;
     @Column(Name = "v")
     public String V;
-    @Column(Name = "id", Type = DBType.INTEGER)
+    @Column(Name = "id")
     public int Id;
 
     public String getImgCateName() {

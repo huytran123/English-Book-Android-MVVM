@@ -1,20 +1,33 @@
 package com.i.englishbook.controller.detail;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.i.englishbook.R;
 import com.i.englishbook.common.Keys;
 import com.i.englishbook.controll.SentenceAdapter;
 import com.i.englishbook.controller.base.BaseView;
 import com.i.englishbook.databinding.ActivityDetailBinding;
+import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by huytran on 9/26/2017.
@@ -30,6 +43,10 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     SentenceAdapter sentenceAdapter;
     ArrayList<Sentence> sentences;
     int currentSentence = 0;
+    String TAG = "DetailView";
+    boolean isSpeech2Text = false;
+
+    private static final int REQUEST_CODE_SPEED_TEXT = 10001;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +60,18 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
         sentenceAdapter = new SentenceAdapter(sentences);
         binding.recycler.setAdapter(sentenceAdapter);
         viewModel.getSentences(cateId);
+        setSupportActionBar(binding.myToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -52,7 +81,6 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
         sentenceAdapter.notifyDataSetChanged();
         if (viewModel.IsPlay.get())
             playSentence(currentSentence);
-
     }
 
     @Override
@@ -62,14 +90,19 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        sentences.get(currentSentence).IsSelected = false;
+        Sentence s = sentences.get(currentSentence);
+        s.IsSelected = false;
         sentenceAdapter.notifyItemChanged(currentSentence);
+
+        if (isSpeech2Text) {
+            isSpeech2Text = false;
+            promptSpeechInput(s.E);
+        }
+
         if (!viewModel.IsPlay.get()) return;
         ++currentSentence;
         if (currentSentence > sentences.size() - 1) {
-            viewModel.getSentences(++cateId);
-            currentSentence = 0;
-            stopSentence();
+            playCompleteCategory();
             return;
         }
         playSentence(currentSentence);
@@ -77,7 +110,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
 
     @Override
     public void playSentence(int index) {
-        if (mediaPlayer!= null && mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             stopSentence();
         }
         if (index != currentSentence)
@@ -128,5 +161,63 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
         stopSentence();
         playSentence(index);
         currentSentence = index;
+    }
+
+    @Override
+    public void onClickSpeech(int index) {
+        sentenceClick(index);
+        isSpeech2Text = true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_SPEED_TEXT && data != null) {
+
+                ArrayList<String> result = data
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                if (result != null && result.size() > 0) {
+                    Sentence s = sentences.get(currentSentence);
+                    s.SpeedText = result.get(0).toUpperCase();
+                    s.ColorSpeedText = viewModel.compareTextSpeech(s.E, s.SpeedText);
+                    sentenceAdapter.notifyItemChanged(currentSentence);
+                } else {
+                    Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    public void playCompleteCategory() {
+        if (viewModel.getCurrentPlayMode() == ModePlay.NEXT) {
+            ++cateId;
+        } else if (viewModel.getCurrentPlayMode() == ModePlay.RANDOM) {
+            cateId = new Random().nextInt(59) + 1;
+        } else {
+            if (viewModel.NumberLoop.get() == 0)
+                ++cateId;
+            else
+                viewModel.NumberLoop.set(viewModel.NumberLoop.get() - 1);
+        }
+        viewModel.getSentences(cateId);
+        currentSentence = 0;
+        stopSentence();
+    }
+
+    private void promptSpeechInput(String text) {
+        if (!checkPermission())
+            return;
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, text);
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEED_TEXT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(), "Not found",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }

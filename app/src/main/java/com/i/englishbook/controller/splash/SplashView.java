@@ -1,11 +1,14 @@
 package com.i.englishbook.controller.splash;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.i.englishbook.R;
 import com.i.englishbook.common.CodeHelper;
@@ -36,7 +39,7 @@ public class SplashView extends BaseView {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(next -> {
                         if (CodeHelper.isEmptyOrNull(next)) {
-                            new CountDownTimer(2000,1000){
+                            new CountDownTimer(2000, 1000) {
                                 @Override
                                 public void onTick(long l) {
 
@@ -55,5 +58,6 @@ public class SplashView extends BaseView {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        checkPermission();
     }
 }
