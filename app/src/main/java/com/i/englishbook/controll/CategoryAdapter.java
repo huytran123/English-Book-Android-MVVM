@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     ArrayList<Category> cates;
+    public boolean IsListLayout = true;
 
     public CategoryAdapter(ArrayList<Category> cates) {
         this.cates = cates;
@@ -23,8 +24,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cate, parent, false);
-        return new CategoryViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(IsListLayout ? R.layout.item_cate : R.layout.item_cate_grid, parent, false);
+        return new CategoryViewHolder(view,IsListLayout);
     }
 
     @Override

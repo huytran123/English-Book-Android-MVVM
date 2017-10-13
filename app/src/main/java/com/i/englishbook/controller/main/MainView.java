@@ -4,11 +4,17 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.i.englishbook.R;
 import com.i.englishbook.common.CodeHelper;
 import com.i.englishbook.common.Keys;
+import com.i.englishbook.common.PreferencesHelper;
 import com.i.englishbook.controll.CategoryAdapter;
 import com.i.englishbook.controller.base.BaseView;
 import com.i.englishbook.controller.detail.DetailView;
@@ -26,6 +32,7 @@ public class MainView extends BaseView implements MainNavigator {
     ActivityMainBinding binding;
     ArrayList<Category> categories;
     CategoryAdapter categoryAdapter;
+    boolean isListLayout = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +45,31 @@ public class MainView extends BaseView implements MainNavigator {
         categoryAdapter = new CategoryAdapter(categories);
         binding.recycler.setAdapter(categoryAdapter);
         mainViewModel.getCategories();
+
+
     }
 
     @Override
     public void getCategoriesComplete(ArrayList<Category> categories) {
         this.categories.addAll(categories);
         categoryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        isListLayout = !isListLayout;
+        item.setIcon(isListLayout ? R.drawable.ic_list : R.drawable.ic_grid);
+        categoryAdapter.IsListLayout = isListLayout;
+        binding.recycler.setLayoutManager(isListLayout ? new LinearLayoutManager(this) : new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        binding.recycler.setAdapter(categoryAdapter);
+        return true;
     }
 
     @Override

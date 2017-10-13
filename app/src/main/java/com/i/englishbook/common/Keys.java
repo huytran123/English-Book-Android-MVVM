@@ -6,4 +6,5 @@ package com.i.englishbook.common;
 
 public class Keys {
     public static String CATEGORIY_ID = "CATEGORIY_ID";
+    public static String IS_LIST_LAYOUT = "IS_LIST_LAYOUT";
 }
