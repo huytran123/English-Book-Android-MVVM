@@ -21,4 +21,6 @@ public interface DetailNavigator {
     void sentenceClick(int index);
 
     void onClickSpeech(int index);
+
+    void onClickSpeechSlow(int index);
 }

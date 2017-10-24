@@ -1,6 +1,11 @@
 package com.i.englishbook.common;
 
 import android.content.Context;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+
+import com.i.englishbook.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -119,6 +124,7 @@ public class CodeHelper {
 
         return "";
     }
+
 
     public static String copyFileFromAsset(Context c, String filename, String pathDis) {
         InputStream in = null;

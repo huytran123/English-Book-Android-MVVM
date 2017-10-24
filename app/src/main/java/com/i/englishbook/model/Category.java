@@ -1,7 +1,10 @@
 package com.i.englishbook.model;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import com.i.englishbook.R;
 import com.i.englishbook.annotations.Column;
 import com.i.englishbook.annotations.Table;
 import com.i.englishbook.controller.main.MainNavigator;

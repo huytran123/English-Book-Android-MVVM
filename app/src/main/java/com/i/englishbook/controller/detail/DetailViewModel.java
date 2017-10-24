@@ -12,6 +12,7 @@ import com.i.englishbook.controller.base.BaseViewModel;
 import com.i.englishbook.model.Category;
 import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
+import com.i.englishbook.model.StatusRead;
 
 import java.util.ArrayList;
 
@@ -86,8 +87,8 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
 
     }
 
-    public int compareTextSpeech(String originText, String textSpeech) {
-        originText = originText.toUpperCase().replace("[\\W]", "");
+    public String compareTextSpeech(String originText, String textSpeech) {
+        originText = originText.toUpperCase().replace(".", "").replace("?", "").replace("!", "");
         textSpeech = textSpeech.toUpperCase();
         String[] arrayOrigin = originText.split(" ");
         String[] arraySpeech = textSpeech.split(" ");
@@ -101,9 +102,9 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
             }
         }
         float percent = (float) totalNumberComplete / arrayOrigin.length;
-        if (percent > 0.5) return context.getResources().getColor(R.color.warning_color);
-        else if (percent > 0.8) return context.getResources().getColor(R.color.complete_color);
-        return context.getResources().getColor(R.color.error_color);
+        if (percent > 0.8) return StatusRead.COMPLETE;
+        else if (percent > 0.5) return StatusRead.WARNING;
+        return  StatusRead.ERROR;
     }
 
 }

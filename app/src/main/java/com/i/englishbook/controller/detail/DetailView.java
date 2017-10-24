@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -23,6 +25,7 @@ import com.i.englishbook.controller.base.BaseView;
 import com.i.englishbook.databinding.ActivityDetailBinding;
 import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
+import com.i.englishbook.model.StatusRead;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -170,6 +173,25 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     }
 
     @Override
+    public void onClickSpeechSlow(int index) {
+        float playbackSpeed = 0.95f;
+        SoundPool soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+        AssetFileDescriptor afd = null;
+        try {
+            afd = getAssets().openFd(String.format("audios/%s.mp3", sentences.get(index).Id - 100));
+            int soundId = soundPool.load(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength(), 1);
+            AudioManager mgr = (AudioManager) getSystemService(AUDIO_SERVICE);
+            final float volume = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+            soundPool.setOnLoadCompleteListener((soundPool1, sampleId, status) -> {
+                soundPool.play(soundId, volume, volume, 1, 0, playbackSpeed);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -179,9 +201,10 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 if (result != null && result.size() > 0) {
                     Sentence s = sentences.get(currentSentence);
-                    s.SpeedText = result.get(0).toUpperCase();
-                    s.ColorSpeedText = viewModel.compareTextSpeech(s.E, s.SpeedText);
+                    s.MyEnglish = result.get(0).toUpperCase();
+                    s.StatusRead = viewModel.compareTextSpeech(s.E, s.MyEnglish);
                     sentenceAdapter.notifyItemChanged(currentSentence);
+                    s.update(this);
                 } else {
                     Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show();
                 }

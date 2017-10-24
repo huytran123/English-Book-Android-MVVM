@@ -1,5 +1,6 @@
 package com.i.englishbook.model;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 
@@ -22,11 +23,16 @@ public class Sentence {
     public String E;
     @Column(Name = "v")
     public String V;
+    @Column(Name = "status_read")
+    public String StatusRead;
+    @Column(Name = "is_favorite")
+    public boolean IsFavorite;
+    @Column(Name = "my_e")
+    public String MyEnglish;
+
 
     public boolean IsSelected;
     public boolean IsPlayed;
-    public String SpeedText;
-    public int ColorSpeedText = Color.WHITE;
 
 
     public void onClick(View view) {
@@ -35,5 +41,13 @@ public class Sentence {
 
     public void onClickSpeech(View view) {
         ((DetailNavigator) ((View) view.getParent()).getContext()).onClickSpeech(CodeHelper.getInt(view.getTag(), 0));
+    }
+
+    public void onClickSpeechSloow(View view) {
+        ((DetailNavigator) ((View) view.getParent()).getContext()).onClickSpeechSlow(CodeHelper.getInt(view.getTag(), 0));
+    }
+
+    public void update(Context c){
+
     }
 }

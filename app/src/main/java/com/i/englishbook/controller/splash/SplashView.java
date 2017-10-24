@@ -49,6 +49,7 @@ public class SplashView extends BaseView {
                                 public void onFinish() {
                                     Intent i = new Intent(SplashView.this, MainView.class);
                                     startActivity(i);
+                                    finish();
                                 }
                             }.start();
                         }

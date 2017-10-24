@@ -46,7 +46,7 @@ public class MainView extends BaseView implements MainNavigator {
         binding.recycler.setAdapter(categoryAdapter);
         mainViewModel.getCategories();
 
-
+        setSupportActionBar(binding.myToolbar);
     }
 
     @Override

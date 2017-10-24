@@ -7,6 +7,7 @@
         <import type="com.i.englishbook.common.CodeHelper" />
 
         <import type="android.view.View" />
+        <import type="com.i.englishbook.model.StatusRead"/>
 
         <variable
             name="sentence"
@@ -55,23 +56,23 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{sentence.SpeedText}"
-                android:textColor="@{sentence.ColorSpeedText}"
+                android:text="@{sentence.MyEnglish}"
+                android:textColor="@{StatusRead.getColor(context,sentence.StatusRead)}"
                 android:textSize="@dimen/text_size_2"
-                android:visibility="@{sentence.SpeedText == `` ? View.GONE:View.VISIBLE}" />
+                android:visibility="@{sentence.MyEnglish == `` ? View.GONE:View.VISIBLE}" />
         </LinearLayout>
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-
             android:src="@{sentence.IsPlayed ? @drawable/ic_sound_played : @drawable/ic_sound}" />
+
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:onClick="@{sentence::onClickSpeech}"
             android:layout_margin="@dimen/padding_0"
+            android:onClick="@{sentence::onClickSpeech}"
             android:src="@drawable/ic_speech"
             android:tag="@{position}" />
 

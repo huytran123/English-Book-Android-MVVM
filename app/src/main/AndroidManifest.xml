@@ -9,11 +9,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeNoTitle">
         <activity
             android:name=".controller.splash.SplashView"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoTitle">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,8 +22,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </activity>
         <activity
-            android:name=".controller.detail.DetailView"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:name=".controller.detail.DetailView">
             <category android:name="android.intent.category.LAUNCHER" />
         </activity>
     </application>
