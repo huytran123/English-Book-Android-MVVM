@@ -13,6 +13,7 @@ import com.i.englishbook.model.Category;
 import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
 import com.i.englishbook.model.StatusRead;
+import com.i.englishbook.model.dao.SentenceDAO;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,12 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        new SentenceDAO().getSentenceByCate(cateId).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(next -> {
+                }, error -> {
+                }, () -> {
+                });
         Observable.<ArrayList<Sentence>>create(e -> {
             try {
                 e.onNext(SqlHelper.exeSql(context, String.format("Select * from Sentences where cat_id = %s", cateId), Sentence.class));
@@ -104,7 +111,7 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
         float percent = (float) totalNumberComplete / arrayOrigin.length;
         if (percent > 0.8) return StatusRead.COMPLETE;
         else if (percent > 0.5) return StatusRead.WARNING;
-        return  StatusRead.ERROR;
+        return StatusRead.ERROR;
     }
 
 }

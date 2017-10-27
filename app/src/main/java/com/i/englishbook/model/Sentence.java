@@ -1,5 +1,9 @@
 package com.i.englishbook.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -13,25 +17,28 @@ import com.i.englishbook.controller.detail.DetailNavigator;
  * Created by huytran on 8/17/2017.
  */
 
-@Table(Name = "Sentence")
+@Entity(tableName = "Sentence")
 public class Sentence {
-    @Column(Name = "id")
+    @ColumnInfo(name = "id")
+    @PrimaryKey
     public int Id;
-    @Column(Name = "cate_id")
+    @ColumnInfo(name =  "cate_id")
     public int CateId;
-    @Column(Name = "e")
+    @ColumnInfo(name = "e")
     public String E;
-    @Column(Name = "v")
+    @ColumnInfo(name = "v")
     public String V;
-    @Column(Name = "status_read")
+    @ColumnInfo(name =  "status_read")
     public String StatusRead;
-    @Column(Name = "is_favorite")
+    @ColumnInfo(name = "is_favorite")
     public boolean IsFavorite;
-    @Column(Name = "my_e")
+    @ColumnInfo(name =  "my_e")
     public String MyEnglish;
 
 
+    @Ignore
     public boolean IsSelected;
+    @Ignore
     public boolean IsPlayed;
 
 
