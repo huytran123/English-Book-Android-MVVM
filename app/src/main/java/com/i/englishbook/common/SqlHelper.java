@@ -1,5 +1,6 @@
 package com.i.englishbook.common;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -46,9 +47,9 @@ public class SqlHelper {
     public static <T> T getInstance(Cursor cursor, Class<?> cls) throws IllegalAccessException, InstantiationException {
         Object o = cls.newInstance();
         for (Field field : cls.getDeclaredFields()) {
-            Column column = field.getAnnotation(Column.class);
+            ColumnInfo column = field.getAnnotation(ColumnInfo.class);
             if (column == null) continue;
-            String columnName = column.Name();
+            String columnName = column.name();
             if (field.getType() == int.class) {
                 field.setInt(o, SqlHelper.getInt(cursor, columnName));
             } else if (field.getType() == boolean.class) {

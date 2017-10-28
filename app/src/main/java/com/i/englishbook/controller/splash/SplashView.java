@@ -1,6 +1,9 @@
 package com.i.englishbook.controller.splash;
 
 import android.Manifest;
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -12,9 +15,11 @@ import android.support.v4.content.ContextCompat;
 
 import com.i.englishbook.R;
 import com.i.englishbook.common.CodeHelper;
+import com.i.englishbook.common.Common;
 import com.i.englishbook.controller.base.BaseView;
 import com.i.englishbook.controller.main.MainView;
 import com.i.englishbook.databinding.ActivitySplashBinding;
+import com.i.englishbook.model.AppDB;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -27,6 +32,13 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashView extends BaseView {
     ActivitySplashBinding binding;
     SplashViewModel splashViewModel;
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+// Since we didn't alter the table, there's nothing else to do here.
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

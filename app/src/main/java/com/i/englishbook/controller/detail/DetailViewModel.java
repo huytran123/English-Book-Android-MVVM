@@ -9,6 +9,7 @@ import com.i.englishbook.R;
 import com.i.englishbook.common.Common;
 import com.i.englishbook.common.SqlHelper;
 import com.i.englishbook.controller.base.BaseViewModel;
+import com.i.englishbook.model.AppDB;
 import com.i.englishbook.model.Category;
 import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
@@ -42,26 +43,16 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
 
     public void getSentences(int cateId) {
         try {
-            CurrentCategory.set(SqlHelper.<Category>exeSql(this.context, String.format("Select * from Categories where id = %s", cateId), Category.class).get(0));
+            CurrentCategory.set(AppDB.getINSTANCE(context).categoryDAO().getCategory(cateId));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        new SentenceDAO().getSentenceByCate(cateId).subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(next -> {
-                }, error -> {
-                }, () -> {
-                });
-        Observable.<ArrayList<Sentence>>create(e -> {
-            try {
-                e.onNext(SqlHelper.exeSql(context, String.format("Select * from Sentences where cat_id = %s", cateId), Sentence.class));
-            } catch (Exception ex) {
-                e.onError(new Throwable(ex));
-            }
-        }).subscribeOn(Schedulers.newThread())
+        AppDB.getINSTANCE(context).sentenceDAO().getSentenceByCate(cateId)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> getNavigator().getSentencesComplete(next),
-                        error -> getNavigator().getSentencesError(error.getMessage()), () -> {
+                        error -> getNavigator().getSentencesError(error.getMessage()),
+                        () -> {
                         });
 
     }

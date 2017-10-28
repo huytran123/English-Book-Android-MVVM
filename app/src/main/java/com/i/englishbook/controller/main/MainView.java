@@ -22,6 +22,7 @@ import com.i.englishbook.databinding.ActivityMainBinding;
 import com.i.englishbook.model.Category;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -50,7 +51,7 @@ public class MainView extends BaseView implements MainNavigator {
     }
 
     @Override
-    public void getCategoriesComplete(ArrayList<Category> categories) {
+    public void getCategoriesComplete(List<Category> categories) {
         this.categories.addAll(categories);
         categoryAdapter.notifyDataSetChanged();
     }

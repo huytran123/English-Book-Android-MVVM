@@ -1,6 +1,7 @@
 package com.i.englishbook.model;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -17,22 +18,22 @@ import com.i.englishbook.controller.detail.DetailNavigator;
  * Created by huytran on 8/17/2017.
  */
 
-@Entity(tableName = "Sentence")
+@Entity(tableName = "Sentences")
 public class Sentence {
     @ColumnInfo(name = "id")
     @PrimaryKey
     public int Id;
-    @ColumnInfo(name =  "cate_id")
+    @ColumnInfo(name = "cat_id")
     public int CateId;
     @ColumnInfo(name = "e")
     public String E;
     @ColumnInfo(name = "v")
     public String V;
-    @ColumnInfo(name =  "status_read")
+    @ColumnInfo(name = "status_read")
     public String StatusRead;
     @ColumnInfo(name = "is_favorite")
     public boolean IsFavorite;
-    @ColumnInfo(name =  "my_e")
+    @ColumnInfo(name = "my_e")
     public String MyEnglish;
 
 
@@ -54,7 +55,7 @@ public class Sentence {
         ((DetailNavigator) ((View) view.getParent()).getContext()).onClickSpeechSlow(CodeHelper.getInt(view.getTag(), 0));
     }
 
-    public void update(Context c){
+    public void update(Context c) {
 
     }
 }

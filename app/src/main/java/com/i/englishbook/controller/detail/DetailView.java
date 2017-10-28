@@ -29,6 +29,7 @@ import com.i.englishbook.model.StatusRead;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -78,7 +79,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     }
 
     @Override
-    public void getSentencesComplete(ArrayList<Sentence> sentences) {
+    public void getSentencesComplete(List<Sentence> sentences) {
         this.sentences.clear();
         this.sentences.addAll(sentences);
         sentenceAdapter.notifyDataSetChanged();

@@ -3,8 +3,10 @@ package com.i.englishbook.controller.main;
 import android.content.Context;
 import android.view.View;
 
+import com.i.englishbook.common.Common;
 import com.i.englishbook.common.SqlHelper;
 import com.i.englishbook.controller.base.BaseViewModel;
+import com.i.englishbook.model.AppDB;
 import com.i.englishbook.model.Category;
 
 import java.util.ArrayList;
@@ -23,16 +25,11 @@ public class MainViewModel extends BaseViewModel<MainNavigator> {
     }
 
     public void getCategories() {
-        Observable.<ArrayList<Category>>create(e -> {
-            try {
-                e.onNext(SqlHelper.exeSql(context, "Select * from Categories", Category.class));
-            } catch (Exception ex) {
-                e.onError(new Throwable(ex));
-            }
-        }).subscribeOn(Schedulers.newThread())
+        AppDB.getINSTANCE(context).categoryDAO().getCategories().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(next -> getNavigator().getCategoriesComplete(next),
-                        error -> getNavigator().getCategoriesError(error.getMessage()), () -> {});
+                        error -> getNavigator().getCategoriesError(error.getMessage()), () -> {
+                        });
 
     }
 }

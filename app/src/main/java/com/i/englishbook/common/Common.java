@@ -1,5 +1,7 @@
 package com.i.englishbook.common;
 
+import com.i.englishbook.model.AppDB;
+
 import java.util.Date;
 
 /**
@@ -15,4 +17,5 @@ public class Common {
     public static String FORMAT_TIME = "HH:mm:ss";
     public static String FORMAT_SCAN = "UPC_A,UPC_E,EAN_8,EAN_13,CODE_39,CODE_93,CODE_128,CODABAR,ITF,RSS_14,QR_Code,Data_Matrix";
     public static int MAX_LOOP_PLAY = 2;
+    public static String DB_NAME = "data.db";
 }

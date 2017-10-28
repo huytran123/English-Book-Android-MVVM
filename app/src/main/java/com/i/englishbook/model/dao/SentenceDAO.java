@@ -7,6 +7,7 @@ import android.arch.persistence.room.Update;
 import com.i.englishbook.model.Sentence;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Flowable;
 
@@ -16,12 +17,9 @@ import io.reactivex.Flowable;
 
 @Dao
 public interface SentenceDAO {
-    @Query("SELECT * FROM Sentence WHERE cate_id = :userIds")
-    Flowable<ArrayList<Sentence>> getSentenceByCate(int cateId);
+    @Query("SELECT * FROM Sentences WHERE cat_id = :cateId")
+    public Flowable<List<Sentence>> getSentenceByCate(int cateId);
 
-    @Update
-    Flowable updateSentence(Sentence sentence);
-
-    @Query("SELECT * FROM Sentence WHERE is_favorite = :fav")
-    Flowable<ArrayList<Sentence>> getSentenceFav(boolean fav);
+    @Query("SELECT * FROM Sentences WHERE is_favorite = :fav")
+    public  Flowable<List<Sentence>> getSentenceFav(boolean fav);
 }
