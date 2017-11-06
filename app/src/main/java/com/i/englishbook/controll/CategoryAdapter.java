@@ -9,6 +9,8 @@ import android.view.animation.AnimationUtils;
 
 import com.i.englishbook.R;
 import com.i.englishbook.common.CodeHelper;
+import com.i.englishbook.common.Keys;
+import com.i.englishbook.common.PreferHelper;
 import com.i.englishbook.model.Category;
 
 import java.util.ArrayList;
@@ -19,7 +21,6 @@ import java.util.ArrayList;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     ArrayList<Category> cates;
-    public boolean IsListLayout = true;
     int oldPosition = -1;
 
     public CategoryAdapter(ArrayList<Category> cates) {
@@ -28,8 +29,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(IsListLayout ? R.layout.item_cate : R.layout.item_cate_grid, parent, false);
-        return new CategoryViewHolder(view,IsListLayout);
+        boolean isListLayout = PreferHelper.getBool(parent.getContext(), Keys.IS_LIST_LAYOUT);
+        View view = LayoutInflater.from(parent.getContext()).inflate(isListLayout ? R.layout.item_cate : R.layout.item_cate_grid, parent, false);
+        return new CategoryViewHolder(view, isListLayout);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
         holder.bindingCate(cate, position);
         View view = holder.itemView;
         int animationId = R.anim.item_animation_fall_up;
-        if(oldPosition!=-1 && position< oldPosition) {
+        if (oldPosition != -1 && position < oldPosition) {
             animationId = R.anim.item_animation_fall_down;
         }
         oldPosition = position;

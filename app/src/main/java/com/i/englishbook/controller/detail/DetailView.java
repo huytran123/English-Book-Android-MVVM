@@ -23,8 +23,10 @@ import com.i.englishbook.common.Keys;
 import com.i.englishbook.controll.SentenceAdapter;
 import com.i.englishbook.controller.base.BaseView;
 import com.i.englishbook.databinding.ActivityDetailBinding;
+import com.i.englishbook.model.AppDB;
 import com.i.englishbook.model.ModePlay;
 import com.i.englishbook.model.Sentence;
+import com.i.englishbook.model.StatusCate;
 import com.i.englishbook.model.StatusRead;
 
 import java.io.IOException;
@@ -32,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by huytran on 9/26/2017.
@@ -49,6 +55,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     int currentSentence = 0;
     String TAG = "DetailView";
     boolean isSpeech2Text = false;
+    int resultCodeDetail = RESULT_CANCELED;
 
     private static final int REQUEST_CODE_SPEED_TEXT = 10001;
 
@@ -96,6 +103,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     public void onCompletion(MediaPlayer mediaPlayer) {
         Sentence s = sentences.get(currentSentence);
         s.IsSelected = false;
+        s.IsPlaying = false;
         sentenceAdapter.notifyItemChanged(currentSentence);
 
         if (isSpeech2Text) {
@@ -135,6 +143,7 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
             afd.close();
             sentences.get(index).IsPlayed = true;
             sentences.get(index).IsSelected = true;
+            sentences.get(index).IsPlaying = true;
             sentenceAdapter.notifyItemChanged(index);
         } catch (IOException e) {
             e.printStackTrace();
@@ -160,17 +169,25 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
     }
 
     @Override
+    public void finish() {
+        setResult(resultCodeDetail);
+        super.finish();
+    }
+
+    @Override
     public void sentenceClick(int index) {
         viewModel.IsPlay.set(false);
         stopSentence();
         playSentence(index);
-        currentSentence = index;
+
     }
 
     @Override
     public void onClickSpeech(int index) {
-        sentenceClick(index);
+        currentSentence = index;
         isSpeech2Text = true;
+        sentences.get(currentSentence).IsSpeech = true;
+        sentenceClick(currentSentence);
     }
 
     @Override
@@ -197,21 +214,39 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CODE_SPEED_TEXT && data != null) {
-
+                Sentence s = sentences.get(currentSentence);
+                s.IsSpeech = false;
                 ArrayList<String> result = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 if (result != null && result.size() > 0) {
-                    Sentence s = sentences.get(currentSentence);
+
                     s.MyEnglish = result.get(0).toUpperCase();
                     s.StatusRead = viewModel.compareTextSpeech(s.E, s.MyEnglish);
-                    sentenceAdapter.notifyItemChanged(currentSentence);
-                    s.update(this);
+
+                    Observable.create(e -> {
+                        s.updateStatus(this);
+                        updateCate();
+                        e.onComplete();
+                    })
+                            .observeOn(Schedulers.newThread())
+                            .subscribeOn(AndroidSchedulers.mainThread())
+                            .subscribe();
+
+                    resultCodeDetail = RESULT_OK;
                 } else {
                     Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show();
                 }
+                sentenceAdapter.notifyItemChanged(currentSentence);
+            }
+        } else {
+            if (requestCode == REQUEST_CODE_SPEED_TEXT || data == null) {
+                Sentence s = sentences.get(currentSentence);
+                s.IsSpeech = false;
+                sentenceAdapter.notifyItemChanged(currentSentence);
             }
         }
     }
+
 
     public void playCompleteCategory() {
         if (viewModel.getCurrentPlayMode() == ModePlay.NEXT) {
@@ -227,6 +262,10 @@ public class DetailView extends BaseView implements DetailNavigator, MediaPlayer
         viewModel.getSentences(cateId);
         currentSentence = 0;
         stopSentence();
+    }
+
+    void updateCate() {
+        AppDB.getINSTANCE(this).categoryDAO().updateStatusSentence(viewModel.CurrentCategory.get().Id);
     }
 
     private void promptSpeechInput(String text) {

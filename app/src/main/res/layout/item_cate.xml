@@ -5,7 +5,7 @@
     <data>
 
         <import type="com.i.englishbook.common.CodeHelper" />
-
+        <import type="android.view.View"/>
         <variable
             name="cate"
             type="com.i.englishbook.model.Category" />
@@ -23,9 +23,9 @@
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
+        android:onClick="@{cate.onClick}"
         android:orientation="horizontal"
-        android:tag="@{position}"
-        android:onClick="@{cate.onClick}">
+        android:tag="@{position}">
 
         <ImageView
             android:layout_width="60dp"
@@ -55,6 +55,23 @@
                 android:textSize="@dimen/text_size_2"
                 android:textStyle="italic" />
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{+cate.Error+` Errors`}"
+            android:textColor="@color/error_color"
+            android:textSize="@dimen/text_size_1_0"
+            android:visibility="@{cate.Error == 0 ? View.GONE : View.VISIBLE}"
+            android:textStyle="bold|italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{+cate.Warning+` Improvement`}"
+            android:textColor="@color/warning_color"
+            android:textSize="@dimen/text_size_1_0"
+            android:visibility="@{cate.Warning == 0 ? View.GONE : View.VISIBLE}"
+            android:textStyle="bold|italic" />
 
     </LinearLayout>
 

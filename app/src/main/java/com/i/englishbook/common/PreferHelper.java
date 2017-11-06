@@ -12,7 +12,7 @@ import java.util.Date;
  */
 
 
-public class PreferencesHelper {
+public class PreferHelper {
     private static SharedPreferences sharedPrefer = null;
 
     public static SharedPreferences getInstance(Context c) {

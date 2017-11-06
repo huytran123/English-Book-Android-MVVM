@@ -11,13 +11,13 @@ import com.i.englishbook.common.CodeHelper;
  */
 
 public class StatusRead {
-    public static String COMPLETE = "COMPLETE", WARNING = "WARNING", ERROR = "ERROR";
+    public static String COMPLETE = "COMPLETE", NONE = "NONE", WARNING = "WARNING", ERROR = "ERROR";
 
     public static int getColor(Context c, String status) {
-        if(CodeHelper.isEmptyOrNull(status)) return Color.TRANSPARENT;
+        if (CodeHelper.isEmptyOrNull(status)) return Color.TRANSPARENT;
         if (status.equals(COMPLETE))
             return c.getResources().getColor(R.color.complete_color);
-        else if( status.equals(WARNING))
+        else if (status.equals(WARNING))
             return c.getResources().getColor(R.color.warning_color);
         return c.getResources().getColor(R.color.error_color);
     }

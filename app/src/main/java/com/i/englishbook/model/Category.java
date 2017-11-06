@@ -22,6 +22,12 @@ public class Category {
     public String E;
     @ColumnInfo(name = "v")
     public String V;
+    @ColumnInfo(name = "complete")
+    public int Complete;
+    @ColumnInfo(name = "error")
+    public int Error;
+    @ColumnInfo(name = "warning")
+    public int Warning;
     @ColumnInfo(name = "id")
     @PrimaryKey
     public int Id;

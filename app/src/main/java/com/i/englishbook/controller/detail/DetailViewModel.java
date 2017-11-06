@@ -91,17 +91,22 @@ public class DetailViewModel extends BaseViewModel<DetailNavigator> {
         String[] arrayOrigin = originText.split(" ");
         String[] arraySpeech = textSpeech.split(" ");
         int totalNumberComplete = 0;
-        for (String t1 : arraySpeech) {
-            for (String t2 : arrayOrigin) {
-                if (t1.equals(t2)) {
-                    ++totalNumberComplete;
-                    break;
+        if (arrayOrigin.length == arraySpeech.length) {
+            for (String t1 : arraySpeech) {
+                for (String t2 : arrayOrigin) {
+                    if (t1.equals(t2)) {
+                        ++totalNumberComplete;
+                        break;
+                    }
                 }
             }
         }
         float percent = (float) totalNumberComplete / arrayOrigin.length;
-        if (percent > 0.8) return StatusRead.COMPLETE;
-        else if (percent > 0.5) return StatusRead.WARNING;
+        if (percent > 0.8) {
+            return StatusRead.COMPLETE;
+        } else if (percent > 0.5) {
+            return StatusRead.WARNING;
+        }
         return StatusRead.ERROR;
     }
 

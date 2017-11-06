@@ -7,7 +7,8 @@
         <import type="com.i.englishbook.common.CodeHelper" />
 
         <import type="android.view.View" />
-        <import type="com.i.englishbook.model.StatusRead"/>
+
+        <import type="com.i.englishbook.model.StatusRead" />
 
         <variable
             name="sentence"
@@ -65,7 +66,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@{sentence.IsPlayed ? @drawable/ic_sound_played : @drawable/ic_sound}" />
+            android:src="@{sentence.getIconSpeech(context)}" />
 
 
         <ImageView
@@ -73,7 +74,7 @@
             android:layout_height="40dp"
             android:layout_margin="@dimen/padding_0"
             android:onClick="@{sentence::onClickSpeech}"
-            android:src="@drawable/ic_speech"
+            android:src="@{sentence.IsSpeech ? @drawable/ic_speech_selected : @drawable/ic_speech}"
             android:tag="@{position}" />
 
     </LinearLayout>
